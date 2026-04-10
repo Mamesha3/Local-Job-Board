@@ -7,6 +7,7 @@ import { useNotifications, useUnreadCount, useMarkAsRead, useMarkAllAsRead, useD
 import { Notification } from '@/services/notifications';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import router from 'next/router';
 
 interface NotificationBellProps {
   userId: string;
@@ -172,7 +173,10 @@ export function NotificationBell({ userId }: NotificationBellProps) {
                         className={`group relative p-4 hover:bg-gray-50 transition-colors cursor-pointer ${
                           !notification.isRead ? 'bg-blue-50/30' : ''
                         }`}
-                        onClick={() => handleNotificationClick(notification)}
+                        onClick={() => {
+                          handleNotificationClick(notification)
+                          router.push("/dashboard/notifications")
+                        }}
                       >
                         <div className="flex gap-3">
                           {/* Icon */}

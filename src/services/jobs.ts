@@ -53,7 +53,7 @@ export async function getJobs(filters?: {
     switch (filters.datePosted) {
       case 'today':
         startDate = new Date(now.setHours(0, 0, 0, 0));
-        break;
+        break;  
       case 'week':
         startDate = new Date(now);
         startDate.setDate(startDate.getDate() - 7);
@@ -64,7 +64,7 @@ export async function getJobs(filters?: {
         break;
       default:
         startDate = new Date(0); // All time
-    }
+      }
     
     queries.push(Query.greaterThanEqual('createdAt', startDate.toISOString()));
   }

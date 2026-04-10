@@ -29,13 +29,14 @@ const notificationTypes = [
 ];
 
 export default function NotificationsPage() {
-  const { user } = useAuth();
+  const { user, role } = useAuth();
   const { data: notifications, isLoading } = useNotifications(user?.$id || '');
   const { data: unreadCount } = useUnreadCount(user?.$id || '');
   const markAsRead = useMarkAsRead();
   const markAllAsRead = useMarkAllAsRead();
   const deleteNotification = useDeleteNotification();
   const [filter, setFilter] = useState('all');
+  
 
   if (!user) {
     return (
@@ -85,7 +86,7 @@ export default function NotificationsPage() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <Link
-                href="/dashboard"
+                href={role === 'seeker' ? '/dashboard/seeker' : role === 'admin' ? '/dashboard/admin' : '/dashboard/company'}
                 className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
               >
                 <ArrowLeft className="w-5 h-5 text-gray-600" />
@@ -116,7 +117,7 @@ export default function NotificationsPage() {
           </div>
 
           {/* Filter Tabs */}
-          <div className="flex items-center gap-1 mt-4 overflow-x-auto pb-2 scrollbar-hide">
+          {/* <div className="flex items-center gap-1 mt-4 overflow-x-auto pb-2 scrollbar-hide">
             {notificationTypes.map((type) => {
               const Icon = type.icon;
               return (
@@ -134,7 +135,7 @@ export default function NotificationsPage() {
                 </button>
               );
             })}
-          </div>
+          </div> */}
         </div>
       </div>
 
@@ -207,14 +208,14 @@ export default function NotificationsPage() {
                       <p className="text-gray-600 text-sm mt-1">
                         {notification.message}
                       </p>
-                      {notification.link && (
+                      {/* {notification.link && (
                         <Link
                           href={notification.link}
                           className="inline-flex items-center gap-1 text-sm text-indigo-600 hover:text-indigo-700 mt-2 font-medium"
                         >
                           View details
                         </Link>
-                      )}
+                      )} */}
                     </div>
 
                     {/* Actions */}

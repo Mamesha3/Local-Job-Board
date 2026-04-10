@@ -26,6 +26,7 @@ interface AuthContextType {
   profile: UserProfile | null;
   role: UserRole | null;
   loading: boolean;
+  isLoading: boolean;
   login: (email: string, password: string) => Promise<void>;
   register: (email: string, password: string, fullName: string, role: UserRole, phone: string) => Promise<void>;
   logout: () => Promise<void>;
@@ -61,7 +62,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         'seeker': 'seeker',
         'admin': 'admin',
       };
-      setRole(roleMap[userProfile.role] || 'seeker');
+      const userRole = roleMap[userProfile.role] || 'seeker';
+      setRole(userRole);
+      
+      // Set user_role cookie for middleware access
+      document.cookie = `user_role=${userRole}; path=/; max-age=86400`;
     } catch {
       setUser(null);
       setProfile(null);
@@ -127,11 +132,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(null);
     setProfile(null);
     setRole(null);
+    // Clear user_role cookie
+    document.cookie = 'user_role=; path=/; max-age=0';
   }
 
   return (
     <AuthContext.Provider
-      value={{ user, profile, role, loading, login, register, logout }}
+      value={{ user, profile, role, loading, isLoading: loading, login, register, logout }}
     >
       {children}
     </AuthContext.Provider>
@@ -145,3 +152,4 @@ export function useAuth() {
   }
   return context;
 }
+
